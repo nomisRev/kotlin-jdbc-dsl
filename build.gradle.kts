@@ -1,19 +1,37 @@
-@Suppress("DSL_SCOPE_VIOLATION") plugins {
+import org.jetbrains.dokka.gradle.DokkaTask
+
+plugins {
   base
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.arrow.kotlin)
-  alias(libs.plugins.arrow.publish)
-  alias(libs.plugins.arrow.nexus)
   alias(libs.plugins.dokka)
-  id("org.jetbrains.kotlinx.knit") version "0.4.0"
+  alias(libs.plugins.publish)
+  alias(libs.plugins.knit)
 }
 
 repositories {
   mavenCentral()
 }
 
-tasks.withType<Test> {
-  useJUnitPlatform()
+tasks {
+  withType<Test> {
+    useJUnitPlatform()
+  }
+
+  withType<DokkaTask>().configureEach {
+    outputDirectory.set(rootDir.resolve("docs"))
+    moduleName.set("Kotlin JDBC DSL")
+    dokkaSourceSets {
+      named("main") {
+        includes.from("README.md")
+        sourceLink {
+          localDirectory.set(file("src/main/kotlin"))
+          remoteUrl.set(uri("https://github.com/nomisRev/kotlin-jdbc-dsl/tree/main/src/main/kotlin").toURL())
+          remoteLineSuffix.set("#L")
+        }
+      }
+    }
+  }
 }
 
 dependencies {
