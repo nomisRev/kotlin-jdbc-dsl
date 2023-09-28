@@ -1,14 +1,16 @@
 [versions]
 arrowGradle = "0.12.0-rc.6"
-dokka = "1.8.10"
-kotlin = "1.8.10"
+dokka = "1.9.0"
+kotlin = "1.9.10"
+publish="0.25.3"
+knit="0.4.0"
 
 [libraries]
 
 [plugins]
 arrow-formatter = { id = "io.arrow-kt.arrow-gradle-config-formatter", version.ref = "arrowGradle" }
 arrow-kotlin = { id = "io.arrow-kt.arrow-gradle-config-kotlin", version.ref = "arrowGradle" }
-arrow-nexus = { id = "io.arrow-kt.arrow-gradle-config-nexus", version.ref = "arrowGradle" }
-arrow-publish = { id = "io.arrow-kt.arrow-gradle-config-publish", version.ref = "arrowGradle" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+publish = { id = "com.vanniktech.maven.publish", version.ref="publish" }
+knit = { id = "org.jetbrains.kotlinx.knit", version.ref="knit" }

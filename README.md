@@ -1,4 +1,4 @@
-# Kotlin JDBC DSL
+# Module Kotlin JDBC DSL
 
 A tiny and simple wrapper around `javax.sql.DataSource` to make working directly with it a bit more convenient in Kotlin.  
 
