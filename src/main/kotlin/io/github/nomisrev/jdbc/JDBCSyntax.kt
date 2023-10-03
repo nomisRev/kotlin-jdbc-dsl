@@ -3,6 +3,7 @@ package io.github.nomisrev.jdbc
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import java.sql.Statement
 import java.sql.Types
 import javax.sql.DataSource
 
@@ -67,6 +68,32 @@ public value class JDBCSyntax(private val conn: Connection) : Connection by conn
       }
     }
   }
+
+  public fun <A> executeBatch(
+    sql: String,
+    values: Iterable<A>,
+    returnGeneratedKeys: Boolean = true,
+    binders: (SqlPreparedStatement.(value: A) -> Unit)
+  ): List<Long> =
+    (if (returnGeneratedKeys) prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+    else prepareStatement(sql)).apply {
+      values.forEach { a ->
+        SqlPreparedStatement(this).binders(a)
+        addBatch()
+      }
+    }.use { statement ->
+      val ints = statement.executeBatch()
+      if (returnGeneratedKeys) {
+        statement.generatedKeys.use { resultSet ->
+          buildList {
+            while (resultSet.next()) {
+              add(resultSet.getLong(1))
+            }
+          }
+        }
+      } else ints.map { it.toLong() }
+    }
+
 
   /** Small DSL Syntax that allows conveniently binding values to `?` in [PreparedStatement]. */
   public class SqlPreparedStatement(private val preparedStatement: PreparedStatement) :

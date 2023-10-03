@@ -36,4 +36,13 @@ tasks {
 
 dependencies {
   implementation(kotlin("stdlib"))
+  testImplementation(kotlin("test"))
+  testImplementation("com.zaxxer:HikariCP:5.0.1")
+  testImplementation("org.testcontainers:postgresql:1.19.1")
+  testImplementation("org.testcontainers:junit-jupiter:1.19.1")
+  testImplementation("org.postgresql:postgresql:42.2.27")
+}
+
+kotlin {
+  jvmToolchain(11)
 }
